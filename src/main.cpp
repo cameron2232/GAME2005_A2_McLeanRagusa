@@ -17,7 +17,7 @@ int main(int argc, char* args[])
 	AllocConsole();
 	freopen("CON", "w", stdout);
 
-	TheGame::Instance().init("GAME2005 - A1 - Cameron McLean - Giuseppe Ragusa", 100, 100, 800, 600, false);
+	TheGame::Instance().init("GAME2005 - A2 - Cameron McLean - Giuseppe Ragusa", 100, 100, 800, 600, false);
 
 	while (TheGame::Instance().isRunning())
 	{

@@ -33,6 +33,8 @@ public:
 	float getTotalFlightTime();
 	bool getIsAnimating();
 	int getAnimationCount();
+	float getMass();
+	bool getGrounded();
 
 	//setters
 	void setIsBeingThrown(bool beingThrown);
@@ -43,6 +45,8 @@ public:
 	void clearThrownSettings();
 	void setIsAnimated(bool isAnimating);
 	void setIsPlaying(bool playing);
+	void setMass(float mass);
+	void setIsGrounded(bool grounded);
 	
 private:
 	float m_gravity;
@@ -57,6 +61,11 @@ private:
 	glm::vec2 initialPos;
 	int animationTime;
 	int animationCount;
+	float mass;
+	float kFrictionCoefficientFloor;
+	float forceFriction;
+	float forceNormal;
+	
 
 	float totalFlightTime;
 	float deltaX;

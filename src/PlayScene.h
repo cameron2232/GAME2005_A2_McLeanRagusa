@@ -42,8 +42,6 @@ private:
 	bool canEditValues;
 
 	Particle* m_pParticle;
-	Wookiee* m_pWookiee;
-	StormTroopers* m_pStormTroopers;
 	Background* m_pBackground;
 	std::vector<Ground*> m_pGround;
 	std::vector<Label*> m_pLabels;

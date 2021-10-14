@@ -5,7 +5,7 @@
 #include "TextureManager.h"
 #include <stdlib.h>
 
-Particle::Particle() : m_gravity(-9.8f), m_isGrounded(false), totalFlightTime(0.0f), initialVelocity(95.0f), pixelsPerMeter(40), launchAngleDeg(15.88963), spinAngle(0), animationCount(1), animationTime(0), isPlaying(false)
+Particle::Particle() : m_gravity(-9.8f), m_isGrounded(false), totalFlightTime(0.0f), initialVelocity(40.0f), pixelsPerMeter(40), launchAngleDeg(0), spinAngle(0), animationCount(1), animationTime(0), isPlaying(false), mass(12.8f)
 {
 	TextureManager::Instance().load("../Assets/textures/thermaldetonator.png", "particle");
 	TextureManager::Instance().load("../Assets/textures/bomb_explosion1.png", "explode1");
@@ -21,7 +21,7 @@ Particle::Particle() : m_gravity(-9.8f), m_isGrounded(false), totalFlightTime(0.
 	getRigidBody()->acceleration = glm::vec2(0.0f, m_gravity);
 	m_isBeingThrown = false;
 
-	getTransform()->position = initialPos = glm::vec2(400.0f, 464.0f);
+	getTransform()->position = initialPos = glm::vec2(400.0f, 364.0f);
 
 	setType(OBSTACLE);
 	getRigidBody()->isColliding = false;
@@ -64,10 +64,10 @@ void Particle::draw()
 void Particle::update()
 {
 	if (m_isBeingThrown) {
-		//updates the angle that the particle is being drawn with, animation purposes only
-		spinAngle += 6;
+		////updates the angle that the particle is being drawn with, animation purposes only
+		//spinAngle += 6;
 
-		//apply the PPM scale to the velocity and adjust it according to the x and y axis using COS and SIN
+		////apply the PPM scale to the velocity and adjust it according to the x and y axis using COS and SIN
 		getRigidBody()->velocity.x = (initialVelocity * pixelsPerMeter) * cos(Util::Deg2Rad * launchAngleDeg);
 		getRigidBody()->velocity.y = (initialVelocity * pixelsPerMeter) * sin(Util::Deg2Rad * launchAngleDeg);
 
@@ -75,17 +75,22 @@ void Particle::update()
 		auto delta = Game::Instance().getDeltaTime();
 		totalFlightTime += delta;
 
-		//using the equations of projectile motion, determine the x and y positions of the particle in motion, and apply the PPM scale to gravity (y acceleration)
+		forceFriction = (getRigidBody()->velocity.x * ((getMass() * getRigidBody()->velocity.x) * kFrictionCoefficientFloor));
+		getRigidBody()->velocity.x *= forceFriction;
+		////using the equations of projectile motion, determine the x and y positions of the particle in motion, and apply the PPM scale to gravity (y acceleration)
 		float newXpos = initialPos.x + (getRigidBody()->velocity.x * totalFlightTime);
-		float newYpos = initialPos.y - (getRigidBody()->velocity.y * totalFlightTime) - (0.5 * (getRigidBody()->acceleration.y * pixelsPerMeter) * pow(totalFlightTime, 2));
+		//float newYpos = initialPos.y - (getRigidBody()->velocity.y * totalFlightTime) - (0.5 * (getRigidBody()->acceleration.y * pixelsPerMeter) * pow(totalFlightTime, 2));
+		float newYpos = initialPos.y - (0.5 * (getRigidBody()->acceleration.y * pixelsPerMeter) * pow(totalFlightTime, 2));
 
-		//determine the change in distance between the previous position and current
+		////determine the change in distance between the previous position and current
 		deltaX = newXpos - getTransform()->position.x;
 		deltaY = newYpos - getTransform()->position.y;
 
-		//update the particles position
+		////update the particles position
 		getTransform()->position.x = newXpos;
-		getTransform()->position.y = newYpos;
+		if(!getGrounded())
+			getTransform()->position.y = newYpos;
+		
 	}
 }
 
@@ -157,6 +162,26 @@ bool Particle::getIsAnimating()
 int Particle::getAnimationCount()
 {
 	return animationCount;
+}
+
+float Particle::getMass()
+{
+	return mass;
+}
+
+bool Particle::getGrounded()
+{
+	return m_isGrounded;
+}
+
+void Particle::setIsGrounded(bool grounded)
+{
+	m_isGrounded = grounded;
+}
+
+void Particle::setMass(float mass)
+{
+	this->mass = mass;
 }
 
 void Particle::setIsAnimated(bool isAnimating)

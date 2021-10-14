@@ -46,7 +46,7 @@ void StartScene::handleEvents()
 void StartScene::start()
 {
 	const SDL_Color blue = { 0, 0, 255, 255 };
-	m_pStartLabel = new Label("GAME2005 - Game Physics - A1", "Niceyear", 50, blue, glm::vec2(400.0f, 40.0f)); 
+	m_pStartLabel = new Label("GAME2005 - Game Physics - A2", "Niceyear", 50, blue, glm::vec2(400.0f, 40.0f)); 
 	m_pStartLabel->setParent(this);
 	addChild(m_pStartLabel);
 

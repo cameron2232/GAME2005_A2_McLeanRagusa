@@ -35,10 +35,10 @@ void PlayScene::update()
 
 	if (CollisionManager::circleAABBCheck(m_pParticle, m_pGround[0]) || CollisionManager::circleAABBCheck(m_pParticle, m_pGround[1]))
 	{
-		if (m_pParticle->isBeingThrown())
-			m_pParticle->setIsAnimated(true);
-		m_pParticle->setIsBeingThrown(false);
-		m_pStormTroopers->setEnabled(false);
+		//if (m_pParticle->isBeingThrown())
+		//	m_pParticle->setIsAnimated(true);
+		//m_pParticle->setIsBeingThrown(false);
+		m_pParticle->setIsGrounded(true);
 	}
 		
 
@@ -64,7 +64,6 @@ void PlayScene::handleEvents()
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE))
 	{
 		m_pParticle->setIsBeingThrown(true);
-		m_pStormTroopers->setEnabled(true);
 		canEditValues = false;
 
 		for (int i = 0; i < 3; i++)
@@ -101,19 +100,7 @@ void PlayScene::start()
 
 	m_pParticle = new Particle();
 
-	//Note: Original position is 400, 464. Add these values when calculating placement
-	m_pStormTroopers = new StormTroopers();
-	m_pStormTroopers->getTransform()->position = m_pParticle->getInitialPos();
-	m_pStormTroopers->getTransform()->position.x += 485 * PIXELS_PER_METER;
-	m_pStormTroopers->getTransform()->position.y = m_pParticle->getInitialPos().y - (m_pStormTroopers->getHeight() / 2) + (m_pParticle->getHeight() / 2);
-	addChild(m_pStormTroopers);
-
 	addChild(m_pParticle);
-
-	m_pWookiee = new Wookiee();
-	m_pWookiee->getTransform()->position = m_pParticle->getInitialPos();
-	m_pWookiee->getTransform()->position.y -= (m_pWookiee->getHeight() / 2) - (m_pParticle->getHeight() / 2);
-	addChild(m_pWookiee);
 
 	SDL_Color black = { 0, 0, 0, 255 };
 	m_pLabels.push_back(new Label("X Velocity: " + std::to_string(cos(m_pParticle->getLaunchAngle() * Util::Deg2Rad) * m_pParticle->getInitialVelocity()) + "m/s", "Consolas", 16, black, glm::vec2(130.0f, 10.0f)));
@@ -171,13 +158,6 @@ void PlayScene::scrollScene()
 		}
 	}
 
-	//updates Wookiees position
-	m_pWookiee->getTransform()->position.x -= deltaX;
-	m_pWookiee->getTransform()->position.y -= deltaY;
-
-	//updates the Stormtroopers position
-	m_pStormTroopers->getTransform()->position.x -= deltaX;
-	m_pStormTroopers->getTransform()->position.y -= deltaY;
 }
 
 void PlayScene::reset()
@@ -186,13 +166,6 @@ void PlayScene::reset()
 	m_pParticle->setInitialPos(glm::vec2(400.0f, 464.0f));
 	m_pParticle->getTransform()->position = m_pParticle->getInitialPos();
 	m_pParticle->clearThrownSettings();
-
-	m_pWookiee->getTransform()->position = m_pParticle->getInitialPos();
-	m_pWookiee->getTransform()->position.y -= (m_pWookiee->getHeight() / 2) - (m_pParticle->getHeight() / 2);
-
-	m_pStormTroopers->setXDistance(m_pStormTroopers->getXDistance());
-	m_pStormTroopers->getTransform()->position.y = m_pParticle->getInitialPos().y - (m_pStormTroopers->getHeight() / 2) + (m_pParticle->getHeight() / 2);
-	m_pStormTroopers->setEnabled(true);
 
 	m_pBackground->getTransform()->position = glm::vec2(0, 600 - m_pBackground->getHeight());
 	m_pGround[0]->getTransform()->position = glm::vec2(m_pGround[0]->getWidth() / 2, 636 - m_pGround[0]->getHeight() / 2);
@@ -251,20 +224,11 @@ void PlayScene::GUI_Function()
 
 	ImGui::Separator();
 
-	int xPos = m_pStormTroopers->getXDistance();
-	if (ImGui::SliderInt("Stormtroopers distance", &xPos, 1, 920)) {
-		if (canEditValues)
-			m_pStormTroopers->setXDistance(xPos);
-	}
-
-	ImGui::Separator();
-
 	if (ImGui::Button("Set Values to Solution 1")) {
 		reset();
 		m_pParticle->setInitialVelocity(95);
 		m_pParticle->setLaunchAngle(15.88963);
 		m_pParticle->setGravity(-9.8);
-		m_pStormTroopers->setXDistance(485);
 	}
 
 	if (ImGui::Button("Set Values to Solution 2")) {
@@ -272,12 +236,6 @@ void PlayScene::GUI_Function()
 		m_pParticle->setInitialVelocity(95);
 		m_pParticle->setLaunchAngle(45);
 		m_pParticle->setGravity(-9.8);
-		m_pStormTroopers->setXDistance(920);
-	}
-
-	if (ImGui::Button("Toggle Visibility of Stormtroopers"))
-	{
-		m_pStormTroopers->setEnabled(!m_pStormTroopers->isEnabled());
 	}
 
 	if (ImGui::Button("Reset")) {
