@@ -12,6 +12,12 @@ public:
 	void draw() override;
 	void update() override;
 	void clean() override;
+
+	float GetFrictionCoefficient();
+	void SetFrictionCoefficient(float co);
+
+private:
+	float m_coefficientOfFriction;
 };
 
 #endif // !__GROUND_H__

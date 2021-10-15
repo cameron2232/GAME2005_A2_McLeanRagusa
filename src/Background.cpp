@@ -3,8 +3,8 @@
 
 Background::Background()
 {
-	TextureManager::Instance().load("../Assets/textures/Tatooine_Background.png", "background");
-	auto size = TextureManager::Instance().getTextureSize("background");
+	TextureManager::Instance().load("../Assets/textures/Warehouse.jpg", "warehouse");
+	auto size = TextureManager::Instance().getTextureSize("warehouse");
 
 	setWidth(size.x);
 	setHeight(size.y);
@@ -18,7 +18,7 @@ Background::~Background()
 
 void Background::draw()
 {
-	TextureManager::Instance().draw("background", getTransform()->position.x, getTransform()->position.y, 0, 255, false);
+	TextureManager::Instance().draw("warehouse", getTransform()->position.x, getTransform()->position.y, 0, 255, false);
 }
 
 void Background::update()

@@ -169,8 +169,10 @@
     <ClCompile Include="..\src\ExampleSprite.cpp" />
     <ClCompile Include="..\src\Ground.cpp" />
     <ClCompile Include="..\src\ImGuiWindowFrame.cpp" />
+    <ClCompile Include="..\src\LootBox.cpp" />
     <ClCompile Include="..\src\Obstacle.cpp" />
     <ClCompile Include="..\src\Particle.cpp" />
+    <ClCompile Include="..\src\Ramp.cpp" />
     <ClCompile Include="..\src\Sprite.cpp" />
     <ClCompile Include="..\src\Stormtroopers.cpp" />
     <ClCompile Include="..\src\UIControl.cpp" />
@@ -215,8 +217,10 @@
     <ClInclude Include="..\src\ExampleSprite.h" />
     <ClInclude Include="..\src\Ground.h" />
     <ClInclude Include="..\src\ImGuiWindowFrame.h" />
+    <ClInclude Include="..\src\LootBox.h" />
     <ClInclude Include="..\src\Obstacle.h" />
     <ClInclude Include="..\src\Particle.h" />
+    <ClInclude Include="..\src\Ramp.h" />
     <ClInclude Include="..\src\SoundType.h" />
     <ClInclude Include="..\src\Sprite.h" />
     <ClInclude Include="..\src\Stormtroopers.h" />

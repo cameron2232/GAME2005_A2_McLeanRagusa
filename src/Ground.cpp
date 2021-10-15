@@ -1,15 +1,15 @@
 #include "Ground.h"
 #include "TextureManager.h"
 
-Ground::Ground()
+Ground::Ground() : m_coefficientOfFriction(0.42f)
 {
-	TextureManager::Instance().load("../Assets/textures/Sand_Ground.png", "ground");
+	TextureManager::Instance().load("../Assets/textures/Metal_Ground.png", "ground");
 	auto size = TextureManager::Instance().getTextureSize("ground");
 
 	setWidth(size.x);
 	setHeight(size.y);
 
-	getTransform()->position = glm::vec2(size.x / 2, 636 - size.y / 2);
+	getTransform()->position = glm::vec2(size.x / 2, 700 - size.y / 2);
 }
 
 Ground::Ground(float x, float y) : Ground() {
@@ -31,4 +31,14 @@ void Ground::update()
 
 void Ground::clean()
 {
+}
+
+float Ground::GetFrictionCoefficient()
+{
+	return m_coefficientOfFriction;
+}
+
+void Ground::SetFrictionCoefficient(float co)
+{
+	m_coefficientOfFriction = co;
 }
