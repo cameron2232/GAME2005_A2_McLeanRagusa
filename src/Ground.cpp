@@ -13,7 +13,7 @@ Ground::Ground() : m_coefficientOfFriction(0.42f)
 }
 
 Ground::Ground(float x, float y) : Ground() {
-	getTransform()->position = glm::vec2(x + getWidth() / 2, y - getHeight() / 2);
+	getTransform()->position = glm::vec2(x + getWidth() / 2, 700 - getHeight() / 2);
 }
 
 Ground::~Ground()
@@ -22,7 +22,7 @@ Ground::~Ground()
 
 void Ground::draw()
 {
-	TextureManager::Instance().draw("ground", getTransform()->position.x, getTransform()->position.y, 0, 255, true);
+	TextureManager::Instance().draw("ground", getTransform()->position.x - m_xOffset, getTransform()->position.y, 0, 255, true);
 }
 
 void Ground::update()
@@ -41,4 +41,14 @@ float Ground::GetFrictionCoefficient()
 void Ground::SetFrictionCoefficient(float co)
 {
 	m_coefficientOfFriction = co;
+}
+
+float Ground::GetXOffset()
+{
+	return m_xOffset;
+}
+
+void Ground::SetXOffset(float x)
+{
+	m_xOffset = x;
 }

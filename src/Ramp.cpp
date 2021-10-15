@@ -2,7 +2,7 @@
 #include "TextureManager.h"
 #include "Util.h"
 
-Ramp::Ramp(): m_width(4), m_height(3)
+Ramp::Ramp() : m_width(4), m_height(3), m_Xoffset(0.0f)
 {
     TextureManager::Instance().load("../Assets/textures/Ramp.png", "ramp");
     
@@ -15,7 +15,7 @@ Ramp::~Ramp() = default;
 
 void Ramp::draw()
 {
-    TextureManager::Instance().drawWithCustomSize("ramp", getTransform()->position.x, getTransform()->position.y, 0, 255, getWidth(), getHeight(), true);
+    TextureManager::Instance().drawWithCustomSize("ramp", getTransform()->position.x - m_Xoffset, getTransform()->position.y, 0, 255, getWidth(), getHeight(), true);
 }
 
 void Ramp::update()
@@ -62,4 +62,14 @@ glm::vec2 Ramp::GetRampStart()
 glm::vec2 Ramp::GetRampEnd()
 {
     return getTransform()->position + glm::vec2(getWidth() / 2, getHeight() / 2);
+}
+
+float Ramp::GetXOffset()
+{
+    return m_Xoffset;
+}
+
+void Ramp::SetXOffset(float x)
+{
+    m_Xoffset = x;
 }

@@ -23,9 +23,14 @@ public:
 	glm::vec2 GetRampStart();
 	glm::vec2 GetRampEnd();
 
+	//used for scrolling
+	float GetXOffset();
+	void SetXOffset(float x);
+
 private:
 	float m_width;
 	float m_height;
+	float m_Xoffset;
 };
 
 #endif // !__RAMP_H__

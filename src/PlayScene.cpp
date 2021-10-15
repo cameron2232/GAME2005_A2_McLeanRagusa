@@ -33,11 +33,17 @@ void PlayScene::update()
 		m_pLootBox->getRigidBody()->acceleration.y = totalAccel * sin(m_pLootBox->GetAngle() * Util::Deg2Rad);
 
 
-		if (m_pLootBox->getTransform()->position.y >= m_groundPosition) {
+		if (m_pLootBox->getTransform()->position.y >= m_groundPosition && !m_boxOnGround) {
 			m_pLootBox->getTransform()->position.y = m_groundPosition;
-			m_boxOnGround = true;
+			setSurfaceToGround();
+		}
+
+		if (m_pLootBox->getRigidBody()->velocity.x <= 0.0f && m_boxOnGround) {
+			m_boxStopped = true;
 			m_pLootBox->SetCanMove(false);
 		}
+
+		scrollScene();
 	}
 
 	updateDisplayList();
@@ -71,17 +77,8 @@ void PlayScene::handleEvents()
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE))
 	{
+		reset();
 		m_simulationActive = true;
-		m_boxOnGround = false;
-		m_boxStopped = false;
-		m_pLootBox->SetCanMove(true);
-		m_pLootBox->UpdatePos(m_pRamp->GetRampStart());
-		m_pLootBox->SetAngle(m_pRamp->GetRampAngle());
-
-		/*for (int i = 0; i < 3; i++)
-			m_pLabels[i]->setEnabled(false);
-		for (int i = 3; i < 6; i++)
-			m_pLabels[i]->setEnabled(true);*/
 	}
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
@@ -109,7 +106,7 @@ void PlayScene::start()
 	addChild(m_pBackground);
 
 	m_pGround.push_back(new Ground());
-	m_pGround.push_back(new Ground(1920, 636));
+	m_pGround.push_back(new Ground(1920, 700));
 	for (int i = 0; i < 2; i++)
 		addChild(m_pGround[i]);
 
@@ -142,70 +139,47 @@ void PlayScene::start()
 
 void PlayScene::scrollScene()
 {
-	////get the particles change in X and Y
-	//float deltaX = m_pParticle->getDeltaX();
-	//float deltaY = m_pParticle->getDeltaY();
+	int offset = m_pLootBox->GetTotalDisplacement();
 
-	////used to slowly move the background
-	//int backgroundOffsetX = m_pParticle->getDeltaTotalX() / 75;
-	//int backgroundOffsetY = m_pParticle->getDeltaTotalY() / 75;
-
-	////updates the background position as the particle moves
-	//m_pBackground->getTransform()->position = glm::vec2(0 - backgroundOffsetX, (600 - m_pBackground->getHeight()) - backgroundOffsetY);
-
-	////used to prevent the particle's focus from dropping below the ground
-	//if (m_pGround[0]->getTransform()->position.y - m_pParticle->getTransform()->position.y < 200) {
-	//	deltaY = 0;
-	//}
-	//else
-	//	m_pParticle->getTransform()->position.y -= deltaY;
-
-	////keeps the particle in the center of the X axis
-	//m_pParticle->getTransform()->position.x -= deltaX;
-
-	////updates the initial position as the particle moves (required so that scrolling scene does not mess up results)
-	//m_pParticle->setInitialPos(glm::vec2(m_pParticle->getInitialPos().x - deltaX, m_pParticle->getInitialPos().y - deltaY));
-
-	////updates the ground scrolling along X
-	//for (int i = 0; i < m_pGround.size(); i++) {
-	//	m_pGround[i]->getTransform()->position.x -= deltaX;
-	//	m_pGround[i]->getTransform()->position.y -= deltaY;
-
-	//	if (m_pGround[i]->getTransform()->position.x < -m_pGround[i]->getWidth() / 2) {
-	//		for (int j = 0; j < m_pGround.size(); j++) {
-	//			m_pGround[j]->getTransform()->position.x += m_pGround[j]->getWidth();
-	//		}
-	//	}
-	//}
-
+	m_pLootBox->SetXOffset(offset);
+	for (int i = 0; i < m_pGround.size(); i++) {
+		m_pGround[i]->SetXOffset( offset);
+	}
+	m_pRamp->SetXOffset(offset);
+	m_pBackground->SetXOffset(offset / 2.5);
 }
 
 void PlayScene::reset()
 {
-	/*m_pParticle->setIsBeingThrown(false);
-	m_pParticle->setInitialPos(glm::vec2(400.0f, 464.0f));
-	m_pParticle->getTransform()->position = m_pParticle->getInitialPos();
-	m_pParticle->clearThrownSettings();
+	m_simulationActive = false;
+	m_boxOnGround = false;
+	m_boxStopped = false;
+	m_coefficientOfFriction = 0.0f;
+	m_pLootBox->SetCanMove(true);
+	m_pLootBox->UpdatePos(m_pRamp->GetRampStart());
+	m_pLootBox->SetAngle(m_pRamp->GetRampAngle());
+	m_pLootBox->SetInitialVelocity(glm::vec2(0.0f, 0.0f));
+	m_pLootBox->getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
+	m_pLootBox->getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
+	m_pLootBox->ResetTime();
 
-	m_pBackground->getTransform()->position = glm::vec2(0, 600 - m_pBackground->getHeight());
-	m_pGround[0]->getTransform()->position = glm::vec2(m_pGround[0]->getWidth() / 2, 636 - m_pGround[0]->getHeight() / 2);
-	m_pGround[1]->getTransform()->position = glm::vec2(1920 + m_pGround[1]->getWidth() / 2, 636 - m_pGround[1]->getHeight() / 2);
-
-	for (int i = 0; i < 3; i++)
-		m_pLabels[i]->setEnabled(true);
-	for (int i = 3; i < 6; i++)
-		m_pLabels[i]->setEnabled(false);
-
-	canEditValues = true;
-	m_pParticle->setIsPlaying(false);
-	m_pParticle->setEnabled(true);*/
+	m_pLootBox->SetXOffset(0);
+	for (int i = 0; i < m_pGround.size(); i++) {
+		m_pGround[i]->SetXOffset(0);
+	}
+	m_pRamp->SetXOffset(0);
+	m_pBackground->SetXOffset(0);
 }
 
 void PlayScene::setSurfaceToGround()
 {
+	m_boxOnGround = true;
 	m_coefficientOfFriction = m_pGround[0]->GetFrictionCoefficient();
+	m_pLootBox->SetAngle(0.0f);
 	m_pLootBox->SetInitialPos(m_pLootBox->getTransform()->position);
-	totalTime = 0;
+	m_pLootBox->SetInitialVelocity(glm::vec2(m_pLootBox->getRigidBody()->velocity.x, 0.0f));
+	m_pLootBox->getRigidBody()->velocity.y = 0.0f;
+	m_pLootBox->ResetTime();
 }
 
 void PlayScene::updateLabels()
@@ -245,43 +219,33 @@ void PlayScene::GUI_Function()
 		}
 	}
 
-	/*float initialVelocity = m_pParticle->getInitialVelocity();
-	if (ImGui::SliderFloat("Initial Velocity", &initialVelocity, 20.0f, 200.0f)) {
-		if (canEditValues)
-			m_pParticle->setInitialVelocity(initialVelocity);
-	}*/
+	ImGui::Separator();
+
+	float mass = m_pLootBox->GetMass();
+	if (ImGui::SliderFloat("Box Mass (Kg)", &mass, 1.0f, 100.0f)) {
+		if (!m_simulationActive)
+			m_pLootBox->SetMass(mass);
+	}
 
 	ImGui::Separator();
 
-	/*float launchAngle = m_pParticle->getLaunchAngle();
-	if (ImGui::SliderFloat("Launch Angle", &launchAngle, 1.0f, 90.0f)) {
-		if (canEditValues)
-			m_pParticle->setLaunchAngle(launchAngle);
-	}*/
+	float gravity = m_gravity;
+	if (ImGui::SliderFloat("Gravity (m/s^2)", &gravity, 1.0f, 50.0f)) {
+		if (!m_simulationActive)
+			m_gravity = gravity;
+	}
 
 	ImGui::Separator();
 
-	/*float gravity = m_pParticle->getGravity();
-	if (ImGui::SliderFloat("Gravity", &gravity, -1.0f, -20.0f)) {
-		if (canEditValues)
-			m_pParticle->setGravity(gravity);
-	}*/
+	float coefficient = m_pGround[0]->GetFrictionCoefficient();
+	if (ImGui::SliderFloat("Friction Coefficient", &coefficient, 0.1f, 1.0f)) {
+		if (!m_simulationActive) {
+			m_pGround[0]->SetFrictionCoefficient(coefficient);
+			m_pGround[1]->SetFrictionCoefficient(coefficient);
+		}
+	}
 
 	ImGui::Separator();
-
-	/*if (ImGui::Button("Set Values to Solution 1")) {
-		reset();
-		m_pParticle->setInitialVelocity(95);
-		m_pParticle->setLaunchAngle(15.88963);
-		m_pParticle->setGravity(-9.8);
-	}*/
-
-	/*if (ImGui::Button("Set Values to Solution 2")) {
-		reset();
-		m_pParticle->setInitialVelocity(95);
-		m_pParticle->setLaunchAngle(45);
-		m_pParticle->setGravity(-9.8);
-	}*/
 
 	if (ImGui::Button("Reset")) {
 		reset();

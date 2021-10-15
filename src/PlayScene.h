@@ -29,7 +29,6 @@ public:
 
 	void scrollScene();
 	void reset();
-	void setSurfaceToRamp();
 	void setSurfaceToGround();
 	void updateLabels();
 private:

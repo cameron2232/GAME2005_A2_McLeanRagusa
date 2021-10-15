@@ -16,8 +16,13 @@ public:
 	float GetFrictionCoefficient();
 	void SetFrictionCoefficient(float co);
 
+	//used for scrolling
+	float GetXOffset();
+	void SetXOffset(float x);
+
 private:
 	float m_coefficientOfFriction;
+	float m_xOffset;
 };
 
 #endif // !__GROUND_H__

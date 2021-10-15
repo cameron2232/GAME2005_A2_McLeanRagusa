@@ -18,7 +18,7 @@ Background::~Background()
 
 void Background::draw()
 {
-	TextureManager::Instance().draw("warehouse", getTransform()->position.x, getTransform()->position.y, 0, 255, false);
+	TextureManager::Instance().draw("warehouse", getTransform()->position.x - m_xOffset, getTransform()->position.y, 0, 255, false);
 }
 
 void Background::update()
@@ -27,4 +27,14 @@ void Background::update()
 
 void Background::clean()
 {
+}
+
+float Background::GetXOffset()
+{
+	return m_xOffset;
+}
+
+void Background::SetXOffset(float x)
+{
+	m_xOffset = x;
 }

@@ -12,6 +12,12 @@ public:
 	void draw() override;
 	void update() override;
 	void clean() override;
+
+	float GetXOffset();
+	void SetXOffset(float x);
+
+private:
+	float m_xOffset;
 };
 
 #endif // !__BACKGROUND__

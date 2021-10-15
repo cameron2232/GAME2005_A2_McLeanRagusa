@@ -17,7 +17,7 @@ LootBox::~LootBox() = default;
 
 void LootBox::draw()
 {
-	TextureManager::Instance().draw("box", getTransform()->position.x, getTransform()->position.y, m_angle, 255, true);
+	TextureManager::Instance().draw("box", getTransform()->position.x - m_xOffset, getTransform()->position.y, m_angle, 255, true);
 }
 
 void LootBox::update()
@@ -28,6 +28,9 @@ void LootBox::update()
 
 		getTransform()->position.x = calculateDisplacement(m_initialPos.x, m_initalVelocity.x, getRigidBody()->acceleration.x);
 		getTransform()->position.y = calculateDisplacement(m_initialPos.y, m_initalVelocity.y, getRigidBody()->acceleration.y);
+
+		getRigidBody()->velocity.x = calculateCurrentVelocity(m_initalVelocity.x, getRigidBody()->acceleration.x);
+		getRigidBody()->velocity.y = calculateCurrentVelocity(m_initalVelocity.x, getRigidBody()->acceleration.y);
 	}
 }
 
@@ -39,6 +42,7 @@ void LootBox::UpdatePos(glm::vec2 pos)
 {
 	getTransform()->position = pos;
 	m_initialPos = pos;
+	startingX = pos.x;
 }
 
 glm::vec2 LootBox::GetInitialPos()
@@ -91,11 +95,36 @@ void LootBox::SetInitialVelocity(glm::vec2 vel)
 	m_initalVelocity = vel;
 }
 
+void LootBox::ResetTime()
+{
+	m_totalMovementTime = 0;
+}
+
+float LootBox::GetXOffset()
+{
+	return m_xOffset;
+}
+
+void LootBox::SetXOffset(float x)
+{
+	m_xOffset = x;
+}
+
+float LootBox::GetTotalDisplacement()
+{
+	return getTransform()->position.x - startingX;
+}
+
 float LootBox::calculateDisplacement(float initialStart, float initialVelocity, float acceleration)
 {
 	float scaledVelocity = initialVelocity * PIXELS_PER_METER;
 	float scaledAcceleration = acceleration * PIXELS_PER_METER;
 
 	return (initialStart + scaledVelocity * m_totalMovementTime + 0.5 * scaledAcceleration * pow(m_totalMovementTime, 2));
+}
+
+float LootBox::calculateCurrentVelocity(float initialVelocity, float acceleration)
+{
+	return initialVelocity + acceleration * m_totalMovementTime;
 }
 

@@ -25,7 +25,11 @@ public:
 	void SetCanMove(bool flag);
 	glm::vec2 GetInitialVelocity();
 	void SetInitialVelocity(glm::vec2 vel);
+	void ResetTime();
 
+	float GetXOffset();
+	void SetXOffset(float x);
+	float GetTotalDisplacement();
 private:
 	glm::vec2 m_initialPos;
 	glm::vec2 m_prevPos;
@@ -34,8 +38,11 @@ private:
 	float m_mass;
 	bool m_canMove;
 	float m_totalMovementTime;
+	float m_xOffset;
+	int startingX;
 
 	float calculateDisplacement(float initialStart, float initialVelocity, float acceleration);
+	float calculateCurrentVelocity(float initialVelocity, float acceleration);
 };
 
 #endif // !__LOOTBOX_H__
