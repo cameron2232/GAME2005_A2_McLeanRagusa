@@ -31,7 +31,12 @@ void LootBox::update()
 
 		getRigidBody()->velocity.x = calculateCurrentVelocity(m_initalVelocity.x, getRigidBody()->acceleration.x);
 		getRigidBody()->velocity.y = calculateCurrentVelocity(m_initalVelocity.x, getRigidBody()->acceleration.y);
+		totalX = getTransform()->position.x - GetInitialPos().x;
+		totalY = getTransform()->position.y - GetInitialPos().y;
 	}
+
+	
+	
 }
 
 void LootBox::clean()
@@ -98,6 +103,10 @@ void LootBox::SetInitialVelocity(glm::vec2 vel)
 void LootBox::ResetTime()
 {
 	m_totalMovementTime = 0;
+}
+glm::vec2 LootBox::GetDistance()
+{
+	return glm::vec2(totalX, totalY);
 }
 
 float LootBox::GetXOffset()

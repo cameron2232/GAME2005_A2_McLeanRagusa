@@ -46,6 +46,7 @@ void PlayScene::update()
 		scrollScene();
 	}
 
+	updateLabels();
 	updateDisplayList();
 }
 
@@ -119,16 +120,17 @@ void PlayScene::start()
 	m_pLootBox->SetInitialVelocity(glm::vec2(0.0f, 0.0f));
 	addChild(m_pLootBox);
 
-	//SDL_Color black = { 0, 0, 0, 255 };
+	SDL_Color black = { 0, 0, 0, 255 };
 	//m_pLabels.push_back(new Label("X Velocity: " + std::to_string(cos(m_pParticle->getLaunchAngle() * Util::Deg2Rad) * m_pParticle->getInitialVelocity()) + "m/s", "Consolas", 16, black, glm::vec2(130.0f, 10.0f)));
 	//m_pLabels.push_back(new Label("Y Velocity: " + std::to_string(sin(m_pParticle->getLaunchAngle() * Util::Deg2Rad) * m_pParticle->getInitialVelocity()) + "m/s", "Consolas", 16, black, glm::vec2(130.0f, 30.0f)));
-	//m_pLabels.push_back(new Label("Press [SPACE] to throw the Thermal Detonator or [`] for options", "Consolas", 20, black, glm::vec2(400.0f, 500.0f)));
-	//m_pLabels.push_back(new Label("X Distance: " + std::to_string(m_pParticle->getDeltaTotalX()) + "m", "Consolas", 16, black, glm::vec2(130.0f, 10.0f)));
+	m_pLabels.push_back(new Label("X Velocity: " + std::to_string((cos(m_pLootBox->GetAngle() * Util::Deg2Rad) * m_pLootBox->GetInitialVelocity().x) * PIXELS_PER_METER) + "m/s","Consolas", 20, black, glm::vec2(130.0f, 10.0f)));
+	m_pLabels.push_back(new Label("X Distance: " + std::to_string(m_pLootBox->GetDistance().x / PIXELS_PER_METER) + "m", "Consolas", 16, black, glm::vec2(130.0f, 30.0f)));
+	m_pLabels.push_back(new Label("Y Distance: " + std::to_string(m_pLootBox->GetDistance().y / PIXELS_PER_METER) + "m", "Consolas", 16, black, glm::vec2(130.0f, 50.0f)));
 	//m_pLabels.back()->setEnabled(false);
 	//m_pLabels.push_back(new Label("Y Distance: " + std::to_string(m_pParticle->getDeltaTotalY() * -1) + "m", "Consolas", 16, black, glm::vec2(130.0f, 30.0f)));
 	//m_pLabels.back()->setEnabled(false);
-	//m_pLabels.push_back(new Label("Time Elapsed: " + std::to_string(m_pParticle->getTotalFlightTime()) + "s", "Consolas", 16, black, glm::vec2(130.0f, 50.0f)));
-	//m_pLabels.back()->setEnabled(false);
+	/*m_pLabels.push_back(new Label("Time Elapsed: " + std::to_string(m_pLootBox->getTotalFlightTime()) + "s", "Consolas", 16, black, glm::vec2(130.0f, 50.0f)));
+	m_pLabels.back()->setEnabled(false);*/
 
 	for (int i = 0; i < m_pLabels.size(); i++)
 		addChild(m_pLabels[i]);
@@ -184,11 +186,11 @@ void PlayScene::setSurfaceToGround()
 
 void PlayScene::updateLabels()
 {
-	/*m_pLabels[0]->setText("X Velocity: " + std::to_string(cos(m_pParticle->getLaunchAngle() * Util::Deg2Rad) * m_pParticle->getInitialVelocity()) + "m/s");
-	m_pLabels[1]->setText("Y Velocity: " + std::to_string(sin(m_pParticle->getLaunchAngle() * Util::Deg2Rad) * m_pParticle->getInitialVelocity()) + "m/s");
-	m_pLabels[3]->setText("X Distance: " + std::to_string(m_pParticle->getDeltaTotalX() / PIXELS_PER_METER) + "m");
-	m_pLabels[4]->setText("Y Distance: " + std::to_string(m_pParticle->getDeltaTotalY() * -1 / PIXELS_PER_METER) + "m");
-	m_pLabels[5]->setText("Time Elapsed: " + std::to_string(m_pParticle->getTotalFlightTime()) + "s");*/
+	//m_pLabels[0]->setText("X Velocity: " + std::to_string((cos(m_pLootBox->GetAngle() * Util::Deg2Rad) * m_pLootBox->GetInitialVelocity().x) * PIXELS_PER_METER) + "m/s");
+	m_pLabels[1]->setText("X Distance: " + std::to_string(m_pLootBox->GetDistance().x / PIXELS_PER_METER) + "m");
+	m_pLabels[2]->setText("Y Distance: " + std::to_string(m_pLootBox->GetDistance().y / PIXELS_PER_METER) + "m");
+	//m_pLabels[4]->setText("Y Distance: " + std::to_string(m_pParticle->getDeltaTotalY() * -1 / PIXELS_PER_METER) + "m");
+	//m_pLabels[5]->setText("Time Elapsed: " + std::to_string(m_pParticle->getTotalFlightTime()) + "s");
 }
 
 void PlayScene::GUI_Function()
