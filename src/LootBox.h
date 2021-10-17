@@ -27,6 +27,7 @@ public:
 	void SetInitialVelocity(glm::vec2 vel);
 	void ResetTime();
 	glm::vec2 GetDistance();
+	float GetTotalTime();
 
 
 	float GetXOffset();

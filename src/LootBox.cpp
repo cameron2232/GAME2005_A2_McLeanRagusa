@@ -109,6 +109,11 @@ glm::vec2 LootBox::GetDistance()
 	return glm::vec2(totalX, totalY);
 }
 
+float LootBox::GetTotalTime()
+{
+	return m_totalMovementTime;
+}
+
 float LootBox::GetXOffset()
 {
 	return m_xOffset;
