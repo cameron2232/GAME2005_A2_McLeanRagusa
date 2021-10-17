@@ -30,7 +30,7 @@ void LootBox::update()
 		getTransform()->position.y = calculateDisplacement(m_initialPos.y, m_initalVelocity.y, getRigidBody()->acceleration.y);
 
 		getRigidBody()->velocity.x = calculateCurrentVelocity(m_initalVelocity.x, getRigidBody()->acceleration.x);
-		getRigidBody()->velocity.y = calculateCurrentVelocity(m_initalVelocity.x, getRigidBody()->acceleration.y);
+		getRigidBody()->velocity.y = calculateCurrentVelocity(m_initalVelocity.y, getRigidBody()->acceleration.y);
 		totalX = getTransform()->position.x - GetInitialPos().x;
 		totalY = getTransform()->position.y - GetInitialPos().y;
 	}

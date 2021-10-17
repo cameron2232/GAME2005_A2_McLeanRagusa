@@ -39,6 +39,7 @@ void PlayScene::update()
 		}
 
 		if (m_pLootBox->getRigidBody()->velocity.x <= 0.0f && m_boxOnGround) {
+			m_pLootBox->getRigidBody()->velocity.x = 0.0f;
 			m_boxStopped = true;
 			m_pLootBox->SetCanMove(false);
 		}
@@ -120,19 +121,15 @@ void PlayScene::start()
 	m_pLootBox->SetInitialVelocity(glm::vec2(0.0f, 0.0f));
 	addChild(m_pLootBox);
 
-	SDL_Color black = { 0, 0, 0, 255 };
+	SDL_Color color = { 0, 0, 0, 255 };
 	m_pLabels.push_back(new Label("X Velocity: " + std::to_string(m_pLootBox->getRigidBody()->velocity.x) + "m/s" 
-		+ " | Y Velocity: " + std::to_string(m_pLootBox->getRigidBody()->velocity.y) + "m/s", "Consolas", 16, black, glm::vec2(230.0f, 10.0f)));
+		+ " | Y Velocity: " + std::to_string(m_pLootBox->getRigidBody()->velocity.y) + "m/s", "Consolas", 14, color, glm::vec2(200.0f, 510.0f)));
 	m_pLabels.push_back(new Label("X Acceleration: " + std::to_string(m_pLootBox->getRigidBody()->acceleration.x) + "m/s^2"
-		+ " | Y Acceleration: " + std::to_string(m_pLootBox->getRigidBody()->acceleration.y) + "m/s^2", "Consolas", 16, black, glm::vec2(284.0f, 30.0f)));
-	
-	m_pLabels.push_back(new Label("X Distance: " + std::to_string(m_pLootBox->GetDistance().x / PIXELS_PER_METER) + "m", "Consolas", 16, black, glm::vec2(104.0f, 50.0f)));
-	m_pLabels.push_back(new Label("Time Elapsed: " + std::to_string(m_pLootBox->GetTotalTime()) + "s", "Consolas", 16, black, glm::vec2(110.0f, 70.0f)));
-	//m_pLabels.back()->setEnabled(false);
-	//m_pLabels.push_back(new Label("Y Distance: " + std::to_string(m_pParticle->getDeltaTotalY() * -1) + "m", "Consolas", 16, black, glm::vec2(130.0f, 30.0f)));
-	//m_pLabels.back()->setEnabled(false);
-	
-	//m_pLabels.back()->setEnabled(false);
+		+ " | Y Acceleration: " + std::to_string(m_pLootBox->getRigidBody()->acceleration.y) + "m/s^2", "Consolas", 14, color, glm::vec2(250.0f, 530.0f)));
+	m_pLabels.push_back(new Label("Total Accel.: " + std::to_string(magnitude(m_pLootBox->getRigidBody()->acceleration.x, m_pLootBox->getRigidBody()->acceleration.y)) + "m/s^2"
+		+ " | Total Vel.:" + std::to_string(magnitude(m_pLootBox->getRigidBody()->velocity.x, m_pLootBox->getRigidBody()->velocity.y)) + "m/s", "Consolas", 14, color, glm::vec2(220.0f, 550.0f)));
+	m_pLabels.push_back(new Label("X Distance: " + std::to_string(m_pLootBox->GetDistance().x / PIXELS_PER_METER) + "m", "Consolas", 14, color, glm::vec2(100.0f, 570.0f)));
+	m_pLabels.push_back(new Label("Time Elapsed: " + std::to_string(m_pLootBox->GetTotalTime()) + "s", "Consolas", 14, color, glm::vec2(100.0f, 590.0f)));
 
 	for (int i = 0; i < m_pLabels.size(); i++)
 		addChild(m_pLabels[i]);
@@ -178,8 +175,11 @@ void PlayScene::reset()
 
 	m_pLabels[1]->setText("X Acceleration: 0.000000m/s^2  |  Y Acceleration: 0.000000m/s^2");
 
-	m_pLabels[2]->setText("X Distance: 0.000000m");
-	m_pLabels[3]->setText("Time Elapsed: 0.000000s");
+	m_pLabels[2]->setText("Total Accel: 0.000000m/s^2  |  Total Vel.: 0.00000m/s");
+
+	m_pLabels[3]->setText("X Distance: 0.000000m");
+
+	m_pLabels[4]->setText("Time Elapsed: 0.000000s");
 
 }
 
@@ -196,20 +196,24 @@ void PlayScene::setSurfaceToGround()
 
 void PlayScene::updateLabels()
 {
-	//m_pLabels[0]->setText("X Velocity: " + std::to_string((cos(m_pLootBox->GetAngle() * Util::Deg2Rad) * m_pLootBox->GetInitialVelocity().x) * PIXELS_PER_METER) + "m/s");
 	m_pLabels[0]->setText("X Velocity: " + std::to_string(m_pLootBox->getRigidBody()->velocity.x) + "m/s"
 		+ " | Y Velocity: " + std::to_string(m_pLootBox->getRigidBody()->velocity.y) + "m/s");
 
 	m_pLabels[1]->setText("X Acceleration: " + std::to_string(m_pLootBox->getRigidBody()->acceleration.x) + "m/s^2"
 		+ " | Y Acceleration: " + std::to_string(m_pLootBox->getRigidBody()->acceleration.y) + "m/s^2");
+
+	m_pLabels[2]->setText("Total Accel.: " + std::to_string(magnitude(m_pLootBox->getRigidBody()->acceleration.x, m_pLootBox->getRigidBody()->acceleration.y)) + "m/s^2"
+		+ " | Total Vel.:" + std::to_string(magnitude(m_pLootBox->getRigidBody()->velocity.x, m_pLootBox->getRigidBody()->velocity.y)) + "m/s");
 	if(m_boxOnGround)
 	{
-		m_pLabels[2]->setText("X Distance: " + std::to_string(m_pLootBox->GetDistance().x / PIXELS_PER_METER) + "m");
-		m_pLabels[3]->setText("Time Elapsed: " + std::to_string(m_pLootBox->GetTotalTime()) + "s");
+		m_pLabels[3]->setText("X Distance: " + std::to_string(m_pLootBox->GetDistance().x / PIXELS_PER_METER) + "m");
+		m_pLabels[4]->setText("Time Elapsed: " + std::to_string(m_pLootBox->GetTotalTime()) + "s");
 	}
-		
-	//m_pLabels[4]->setText("Y Distance: " + std::to_string(m_pParticle->getDeltaTotalY() * -1 / PIXELS_PER_METER) + "m");
-	//m_pLabels[5]->setText("Time Elapsed: " + std::to_string(m_pParticle->getTotalFlightTime()) + "s");
+}
+
+float PlayScene::magnitude(float a, float b)
+{
+	return sqrt(pow(a, 2) + pow(b, 2));
 }
 
 void PlayScene::GUI_Function()

@@ -31,6 +31,7 @@ public:
 	void reset();
 	void setSurfaceToGround();
 	void updateLabels();
+	float magnitude(float a, float b);
 private:
 	// IMGUI Function
 	void GUI_Function();

@@ -138,19 +138,10 @@
     <ClCompile Include="..\src\ExampleSprite.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Particle.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Background.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Ground.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Wookiee.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Stormtroopers.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Ramp.cpp">
@@ -305,19 +296,10 @@
     <ClInclude Include="..\src\ExampleSprite.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Particle.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Background.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Ground.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Wookiee.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Stormtroopers.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Ramp.h">
