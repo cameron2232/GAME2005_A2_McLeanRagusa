@@ -121,14 +121,17 @@ void PlayScene::start()
 	addChild(m_pLootBox);
 
 	SDL_Color black = { 0, 0, 0, 255 };
-	m_pLabels.push_back(new Label("X Velocity: " + std::to_string(m_pLootBox->getRigidBody()->velocity.x) + "m/s", "Consolas", 16, black, glm::vec2(130.0f, 10.0f)));
-	m_pLabels.push_back(new Label("Y Velocity: " + std::to_string(m_pLootBox->getRigidBody()->velocity.y) + "m/s", "Consolas", 16, black, glm::vec2(130.0f, 30.0f)));
-	m_pLabels.push_back(new Label("X Distance: " + std::to_string(m_pLootBox->GetDistance().x / PIXELS_PER_METER) + "m", "Consolas", 16, black, glm::vec2(130.0f, 50.0f)));
-	m_pLabels.push_back(new Label("Y Distance: " + std::to_string(m_pLootBox->GetDistance().y / PIXELS_PER_METER) + "m", "Consolas", 16, black, glm::vec2(130.0f, 60.0f)));
+	m_pLabels.push_back(new Label("X Velocity: " + std::to_string(m_pLootBox->getRigidBody()->velocity.x) + "m/s" 
+		+ " | Y Velocity: " + std::to_string(m_pLootBox->getRigidBody()->velocity.y) + "m/s", "Consolas", 16, black, glm::vec2(230.0f, 10.0f)));
+	m_pLabels.push_back(new Label("X Acceleration: " + std::to_string(m_pLootBox->getRigidBody()->acceleration.x) + "m/s^2"
+		+ " | Y Acceleration: " + std::to_string(m_pLootBox->getRigidBody()->acceleration.y) + "m/s^2", "Consolas", 16, black, glm::vec2(284.0f, 30.0f)));
+	
+	m_pLabels.push_back(new Label("X Distance: " + std::to_string(m_pLootBox->GetDistance().x / PIXELS_PER_METER) + "m", "Consolas", 16, black, glm::vec2(104.0f, 50.0f)));
+	m_pLabels.push_back(new Label("Time Elapsed: " + std::to_string(m_pLootBox->GetTotalTime()) + "s", "Consolas", 16, black, glm::vec2(110.0f, 70.0f)));
 	//m_pLabels.back()->setEnabled(false);
 	//m_pLabels.push_back(new Label("Y Distance: " + std::to_string(m_pParticle->getDeltaTotalY() * -1) + "m", "Consolas", 16, black, glm::vec2(130.0f, 30.0f)));
 	//m_pLabels.back()->setEnabled(false);
-	m_pLabels.push_back(new Label("Time Elapsed: " + std::to_string(m_pLootBox->GetTotalTime()) + "s", "Consolas", 16, black, glm::vec2(130.0f, 90.0f)));
+	
 	//m_pLabels.back()->setEnabled(false);
 
 	for (int i = 0; i < m_pLabels.size(); i++)
@@ -170,6 +173,14 @@ void PlayScene::reset()
 	}
 	m_pRamp->SetXOffset(0);
 	m_pBackground->SetXOffset(0);
+
+	m_pLabels[0]->setText("X Velocity: 0.000000m/s |  Y Velocity: 0.000000m/s");
+
+	m_pLabels[1]->setText("X Acceleration: 0.000000m/s^2  |  Y Acceleration: 0.000000m/s^2");
+
+	m_pLabels[2]->setText("X Distance: 0.000000m");
+	m_pLabels[3]->setText("Time Elapsed: 0.000000s");
+
 }
 
 void PlayScene::setSurfaceToGround()
@@ -186,11 +197,17 @@ void PlayScene::setSurfaceToGround()
 void PlayScene::updateLabels()
 {
 	//m_pLabels[0]->setText("X Velocity: " + std::to_string((cos(m_pLootBox->GetAngle() * Util::Deg2Rad) * m_pLootBox->GetInitialVelocity().x) * PIXELS_PER_METER) + "m/s");
-	m_pLabels[0]->setText("X Velocity: " + std::to_string(m_pLootBox->getRigidBody()->velocity.x) + "m/s");
-	m_pLabels[1]->setText("Y Velocity: " + std::to_string(m_pLootBox->getRigidBody()->velocity.y) + "m/s");
-	m_pLabels[2]->setText("X Distance: " + std::to_string(m_pLootBox->GetDistance().x / PIXELS_PER_METER) + "m");
-	m_pLabels[3]->setText("Y Distance: " + std::to_string(m_pLootBox->GetDistance().y / PIXELS_PER_METER) + "m");
-	m_pLabels[4]->setText(std::to_string(m_pLootBox->GetTotalTime()) + "s");
+	m_pLabels[0]->setText("X Velocity: " + std::to_string(m_pLootBox->getRigidBody()->velocity.x) + "m/s"
+		+ " | Y Velocity: " + std::to_string(m_pLootBox->getRigidBody()->velocity.y) + "m/s");
+
+	m_pLabels[1]->setText("X Acceleration: " + std::to_string(m_pLootBox->getRigidBody()->acceleration.x) + "m/s^2"
+		+ " | Y Acceleration: " + std::to_string(m_pLootBox->getRigidBody()->acceleration.y) + "m/s^2");
+	if(m_boxOnGround)
+	{
+		m_pLabels[2]->setText("X Distance: " + std::to_string(m_pLootBox->GetDistance().x / PIXELS_PER_METER) + "m");
+		m_pLabels[3]->setText("Time Elapsed: " + std::to_string(m_pLootBox->GetTotalTime()) + "s");
+	}
+		
 	//m_pLabels[4]->setText("Y Distance: " + std::to_string(m_pParticle->getDeltaTotalY() * -1 / PIXELS_PER_METER) + "m");
 	//m_pLabels[5]->setText("Time Elapsed: " + std::to_string(m_pParticle->getTotalFlightTime()) + "s");
 }
